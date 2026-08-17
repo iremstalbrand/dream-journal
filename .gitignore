@@ -1,0 +1,5 @@
+node_modules/
+.env
+.env.local
+dist/
+server/data/seed-dreams.json
