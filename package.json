@@ -19,6 +19,8 @@
   },
   "homepage": "https://github.com/iremstalbrand/dream-journal#readme",
   "dependencies": {
+    "dotenv": "^17.4.2",
+    "mongoose": "^9.9.3",
     "zod": "^4.4.3"
   },
   "devDependencies": {
