@@ -1,3 +1,4 @@
+//one shared rulebook that bot frontend and backend import from, so they never disagree about what a "dream" looks like.
 import { z } from "zod";
 
 // The four dream types. The dreamer picks one at entry — never the AI.
@@ -5,6 +6,7 @@ export const DreamType = z.enum(["ordinary", "vivid", "nightmare", "lucid"]);
 
 // Jung's archetypes as a closed list. The model cannot invent new ones —
 // anything outside this list fails validation and never reaches the database.
+//z.enum([...]) means "this value must be exactly one of these strings, nothing else."
 export const Archetype = z.enum([
   "the shadow",
   "the anima",
