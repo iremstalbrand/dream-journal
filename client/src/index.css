@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #12161C;
+  --color-surface: #1C2128;
+  --color-line: #2E3540;
+  --color-ink: #E8DCC4;
+  --color-ink-soft: #9A9483;
+  --color-ink-faint: #6A6659;
+  --color-gold: #C89B4A;
+  --color-on-gold: #12161C;
+
+  --font-body: "Spectral", serif;
+  --font-display: "Fraunces", serif;
+}
