@@ -35,7 +35,7 @@ export const DreamReadingSchema = z.object({
 
 // A stored dream. `reading` is null until one is requested.
 export const DreamSchema = z.object({
-  id: z.string(),
+  _id: z.string(),
   userId: z.string(),
   date: z.string(),
   type: DreamType,
