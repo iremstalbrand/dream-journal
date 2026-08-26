@@ -14,6 +14,24 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/:id", async (req, res) => {
+  try {
+    const dream = await Dream.findOne({
+      _id: req.params.id,
+      userId: "seed-user",
+    });
+
+    if (!dream) {
+      return res.status(404).json({ error: "Dream not found" });
+    }
+
+    res.status(200).json(dream);
+  } catch (error) {
+    console.error("Error getting dream:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 router.post("/", async (req, res) => {
   try {
     const result = NewDreamSchema.safeParse(req.body);

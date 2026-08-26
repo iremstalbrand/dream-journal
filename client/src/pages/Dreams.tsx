@@ -36,9 +36,10 @@ return (
     ) : (
     <div className="flex flex-col gap-3">
       {dreams.map((dream) => (
-        <div
+        <Link
           key={dream._id}
-          className="bg-surface border border-line rounded-lg p-4"
+          to={`/dream/${dream._id}`}
+          className="bg-surface border border-line rounded-lg p-4 block"
         >
           <div className="text-xs text-ink-soft mb-1.5">
             {dream.date} · {dream.type}
@@ -46,7 +47,7 @@ return (
           <p className="text-[15px] leading-relaxed line-clamp-1">
             {dream.text}
           </p>
-        </div>
+        </Link>
       ))}
     </div>
      )}
