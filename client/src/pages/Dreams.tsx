@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import BottomNav from "../components/BottomNav";
 import {useState} from 'react';
 import {useEffect} from 'react';
@@ -18,6 +19,21 @@ return (
     <h1 className="text-2xl mb-1">Dreams</h1>
     <p className="text-ink-faint text-sm mb-6">{dreams.length} recorded</p>
 
+
+    {dreams.length === 0 ? (
+      <div className="flex flex-col items-center text-center pt-16">
+        <p className="text-lg mb-2">Nothing recorded yet</p>
+        <p className="text-ink-soft text-[15px] leading-relaxed max-w-[240px] mb-7">
+          Dreams fade within minutes of waking. Write yours down while it's still there.
+        </p>
+        <Link
+          to="/"
+          className="h-12 px-8 flex items-center rounded-lg bg-gold text-on-gold text-[15px] font-medium"
+        >
+          Write a dream
+        </Link>
+      </div>
+    ) : (
     <div className="flex flex-col gap-3">
       {dreams.map((dream) => (
         <div
@@ -33,6 +49,7 @@ return (
         </div>
       ))}
     </div>
+     )}
     <BottomNav />
   </div>
 )};
