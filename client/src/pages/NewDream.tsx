@@ -22,7 +22,7 @@ export default function NewDream() {
     return;
   }
 
-  navigate("/");
+  navigate("/dreams");
 }
   
 
