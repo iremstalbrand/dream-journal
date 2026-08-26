@@ -1,4 +1,4 @@
-
+import BottomNav from "../components/BottomNav";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import type { DreamType } from "../../../shared/types";
@@ -69,6 +69,7 @@ export default function NewDream() {
             Save dream
         </button>
       </div>
+      <BottomNav />
     </div>
   );
 }
