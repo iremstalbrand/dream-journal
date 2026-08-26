@@ -1,3 +1,4 @@
+import BottomNav from "../components/BottomNav";
 import {useState} from 'react';
 import {useEffect} from 'react';
 import type { Dream } from "../../../shared/types";
@@ -13,7 +14,7 @@ export default function Dreams() {
   }, []);
 
 return (
-  <div className="min-h-screen bg-bg text-ink font-body p-5">
+  <div className="min-h-screen bg-bg text-ink font-body p-5 pb-24">
     <h1 className="text-2xl mb-1">Dreams</h1>
     <p className="text-ink-faint text-sm mb-6">{dreams.length} recorded</p>
 
@@ -32,5 +33,6 @@ return (
         </div>
       ))}
     </div>
+    <BottomNav />
   </div>
 )};
