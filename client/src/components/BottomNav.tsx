@@ -4,8 +4,8 @@ export default function BottomNav() {
   const location = useLocation();
 
   const items = [
-    { path: "/new", label: "write" },
-    { path: "/", label: "dreams" },
+    { path: "/", label: "write" },
+    { path: "/dreams", label: "dreams" },
     { path: "/timeline", label: "timeline" },
   ];
 

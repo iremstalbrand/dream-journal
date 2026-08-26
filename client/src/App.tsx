@@ -5,8 +5,8 @@ import NewDream from './pages/NewDream'
 export default function App() {
   return (
     <Routes>
-      <Route path="/" element={<Dreams />} />
-      <Route path="/new" element={<NewDream />} />
+      <Route path="/" element={<NewDream />} />
+      <Route path="/dreams" element={<Dreams />} />
     </Routes>
   )
 }
