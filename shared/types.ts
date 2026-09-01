@@ -24,7 +24,7 @@ export const Archetype = z.enum([
 // One archetype and the short passage written about it.
 export const ArchetypeReadingSchema = z.object({
   name: Archetype,
-  reading: z.string().min(1).max(600),
+  reading: z.string().min(1).max(400),
 });
 
 // The full shape we expect back from Gemini.
