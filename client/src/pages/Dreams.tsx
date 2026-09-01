@@ -14,7 +14,23 @@ export default function Dreams() {
       .then((data) => setDreams(data));
   }, []);
 
+  const [loading, setLoading] = useState(true);
+
+useEffect(() => {
+  fetch("http://localhost:3000/dreams")
+    .then((res) => res.json())
+    .then((data) => {
+      setDreams(data);
+      setLoading(false);
+    });
+}, []);
+
+if (loading) {
+  return <div className="min-h-screen bg-bg" />;
+}
+
 return (
+  
   <div className="min-h-screen bg-bg text-ink font-body p-5 pb-24">
     <h1 className="text-2xl mb-1">Dreams</h1>
     <p className="text-ink-faint text-sm mb-6">{dreams.length} recorded</p>
