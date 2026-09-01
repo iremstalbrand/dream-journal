@@ -1,3 +1,4 @@
+import { readDream } from "../gemini";
 import { Router } from "express";
 import { Dream } from "../models/Dream";
 import { NewDreamSchema } from "../../shared/types";
@@ -43,6 +44,30 @@ router.post("/", async (req, res) => {
   } catch (error) {
     console.error("Error creating dream:", error);
     res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+
+router.post("/:id/reading", async (req, res) => {
+  try {
+    const dream = await Dream.findOne({
+      _id: req.params.id,
+      userId: "seed-user",
+    });
+
+    if (!dream) {
+      return res.status(404).json({ error: "Dream not found" });
+    }
+
+    const reading = await readDream(dream.text);
+
+    dream.reading = reading;
+    await dream.save();
+
+    res.status(200).json(dream);
+  } catch (error) {
+    console.error("Error reading dream:", error);
+    res.status(502).json({ error: "reading_failed" });
   }
 });
 

@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/iremstalbrand/dream-journal#readme",
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "@tailwindcss/vite": "^4.3.3",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
