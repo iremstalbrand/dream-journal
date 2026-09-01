@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import type { Dream } from "../../../shared/types";
 
 export default function DreamDetail() {
@@ -7,6 +7,9 @@ export default function DreamDetail() {
   const [dream, setDream] = useState<Dream | null>(null);
 
   const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");
+
+  const [searchParams] = useSearchParams();
+  const shouldAnalyse = searchParams.get("analyse") === "true";
 
 async function handleRead() {
   setStatus("loading");
@@ -22,6 +25,12 @@ async function handleRead() {
     setStatus("error");
   }
 }
+
+useEffect(() => {
+  if (dream && !dream.reading && shouldAnalyse && status === "idle") {
+    handleRead();
+  }
+}, [dream, shouldAnalyse]);
 
   useEffect(() => {
     fetch(`http://localhost:3000/dreams/${id}`)
