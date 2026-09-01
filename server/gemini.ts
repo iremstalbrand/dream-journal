@@ -26,7 +26,7 @@ Return ONLY JSON in this exact shape:
 Rules:
 - Between 1 and 3 archetypes, no more
 - "name" must be one of: ${ARCHETYPES}
-- Each "reading" is 2-3 sentences, under 400 characters
+- Each "reading" is 2-3 sentences, under 500 characters
 - Use reported speech: "Jung read the mother figure as...", "In Jung's writing, still water is..."
 - Never write "your unconscious is telling you" or claim what the dream means
 - This is one reading among many, not the truth
