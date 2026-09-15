@@ -65,11 +65,11 @@ export default function NewDream() {
         </div>
 
         <input
-          type="date"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-          className="mt-4 bg-surface border border-line rounded-lg p-2 text-sm text-ink"
-        />
+  type="date"
+  value={date}
+  onChange={(e) => setDate(e.target.value)}
+  className="mt-4 w-full bg-surface border border-line rounded-lg px-4 py-3 text-[15px] text-ink [color-scheme:dark]"
+/>
 
         <textarea
           value={text}
