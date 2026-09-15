@@ -10,15 +10,18 @@ const FIXTURE = {
   archetypes: [
     {
       name: "the mother" as const,
-      reading: "Jung read the mother figure as ambivalent, nurturing and devouring at once. Encountering her younger than you have ever known her points, in his writing, to a maternal image formed inside the psyche rather than remembered from life. The coat left behind marks her presence continuing after the figure withdraws.",
+      reading:
+        "Jung read the mother figure as ambivalent, nurturing and devouring at once. Encountering her younger than you have ever known her points, in his writing, to a maternal image formed inside the psyche rather than remembered from life. The coat left behind marks her presence continuing after the figure withdraws.",
     },
     {
       name: "the unconscious" as const,
-      reading: "Still water, in Jung's writing, is the surface of the unconscious. That the lake does not move suggests contents held rather than flowing, and the far shore you cannot make out is the material not yet available to consciousness.",
+      reading:
+        "Still water, in Jung's writing, is the surface of the unconscious. That the lake does not move suggests contents held rather than flowing, and the far shore you cannot make out is the material not yet available to consciousness.",
     },
     {
       name: "the shadow" as const,
-      reading: "Jung described approaching a threshold without crossing it as a shadow motif. Ground that recedes as you step toward it marks the part of the self that is approached but not met.",
+      reading:
+        "Jung described approaching a threshold without crossing it as a shadow motif. Ground that recedes as you step toward it marks the part of the self that is approached but not met.",
     },
   ],
 };
@@ -53,18 +56,18 @@ ${text}
 `;
 
   try {
-    console.log("Calling Gemini...");
-    const result = await Promise.race([
+    const result = (await Promise.race([
       model.generateContent(prompt),
-      new Promise<never>((_, reject) =>
-        setTimeout(() => reject(new Error("Gemini timed out after 25s")), 25000),
+      new Promise((_, reject) =>
+        setTimeout(() => reject(new Error("timeout")), 25000)
       ),
-    ]);
+    ])) as Awaited<ReturnType<typeof model.generateContent>>;
+
     const raw = result.response.text();
     const parsed = JSON.parse(raw);
     return DreamReadingSchema.parse(parsed);
   } catch (error) {
-    console.log("Gemini failed:", error);
+    console.error("Gemini failed:", error);
     if (process.env.USE_FIXTURE === "true") {
       return FIXTURE;
     }
