@@ -76,17 +76,29 @@ export default function DreamDetail() {
         </button>
       )}
 
-      {status === "loading" && (
-        <div className="mt-8 flex flex-col items-center">
-          <p className="text-lg mb-3">Reading through Jung</p>
-          <div className="flex gap-1.5">
-            <div className="w-1.5 h-1.5 rounded-full bg-gold" />
-            <div className="w-1.5 h-1.5 rounded-full bg-ink-faint" />
-            <div className="w-1.5 h-1.5 rounded-full bg-ink-faint" />
-          </div>
-          <p className="text-xs text-ink-faint mt-3">This takes a few seconds.</p>
-        </div>
-      )}
+    {status === "loading" && (
+  <div className="mt-10 flex flex-col items-center">
+    <p className="text-lg mb-4">Reading through Jung</p>
+
+    <div className="flex gap-1.5">
+      {[0, 1, 2].map((i) => (
+        <motion.div
+          key={i}
+          className="w-1.5 h-1.5 rounded-full bg-gold"
+          animate={{ opacity: [0.25, 1, 0.25] }}
+          transition={{
+            duration: 1.4,
+            repeat: Infinity,
+            delay: i * 0.22,
+            ease: "easeInOut",
+          }}
+        />
+      ))}
+    </div>
+
+    <p className="text-xs text-ink-faint mt-4">This takes a few seconds.</p>
+  </div>
+)}
 
       {status === "error" && (
         <div className="mt-8">
