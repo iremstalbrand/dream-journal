@@ -3,18 +3,22 @@ import BottomNav from "../components/BottomNav";
 import {useState} from 'react';
 import {useEffect} from 'react';
 import type { Dream } from "../../../shared/types";
+import { motion } from "motion/react";
+
+const TYPE_COLORS: Record<string, string> = {
+  ordinary: "#6A6659",
+  vivid: "#C89B4A",
+  nightmare: "#8A6535",
+  lucid: "#E8DCC4",
+};
 
 export default function Dreams() {
 
-   const [dreams, setDreams] = useState<Dream[]>([]);
+const [dreams, setDreams] = useState<Dream[]>([]);
 
-     useEffect(() => {
-    fetch("http://localhost:3000/dreams")
-      .then((res) => res.json())
-      .then((data) => setDreams(data));
-  }, []);
 
-  const [loading, setLoading] = useState(true);
+
+const [loading, setLoading] = useState(true);
 
 useEffect(() => {
   fetch("http://localhost:3000/dreams")
@@ -24,6 +28,8 @@ useEffect(() => {
       setLoading(false);
     });
 }, []);
+
+
 
 if (loading) {
   return <div className="min-h-screen bg-bg" />;
@@ -51,21 +57,51 @@ return (
       </div>
     ) : (
     <div className="flex flex-col gap-3">
-      {dreams.map((dream) => (
-        <Link
-          key={dream._id}
-          to={`/dream/${dream._id}`}
-          className="bg-surface border border-line rounded-lg p-4 block"
-        >
-          <div className="text-xs text-ink-soft mb-1.5">
-            {dream.date} · {dream.type}
+      {dreams.map((dream, i) => {
+  const firstStop = dream.text.search(/[.!?]/);
+  const title =
+    firstStop > 0 && firstStop < 60
+      ? dream.text.slice(0, firstStop)
+      : dream.text.slice(0, 42).trim() + "…";
+  const rest = dream.text.slice(title.length).trim();
+
+  return (
+    <motion.div
+      key={dream._id}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.45, delay: i * 0.07 }}
+    >
+      <Link
+        to={`/dream/${dream._id}`}
+        className="block bg-surface/60 border border-line rounded-2xl p-5 backdrop-blur-sm"
+      >
+        <div className="flex items-start justify-between gap-3 mb-1">
+          <h2 className="text-[17px] text-ink leading-snug">{title}</h2>
+          <div className="flex items-center gap-1.5 shrink-0 mt-1">
+            <span
+              className="w-1.5 h-1.5 rounded-full"
+              style={{ background: TYPE_COLORS[dream.type] }}
+            />
+            <span className="text-xs text-ink-soft">{dream.type}</span>
           </div>
-          <p className="text-[15px] leading-relaxed line-clamp-1">
-            {dream.text}
-          </p>
-        </Link>
-      ))}
-    </div>
+        </div>
+
+        <p className="text-xs text-ink-faint mb-3">
+          {new Date(dream.date).toLocaleDateString("en-GB", {
+            day: "numeric",
+            month: "short",
+            year: "numeric",
+          })}
+        </p>
+
+        <p className="text-[14px] text-ink-soft leading-relaxed line-clamp-3">
+          {rest || dream.text}
+        </p>
+      </Link>
+    </motion.div>
+  );
+})}    </div>
      )}
     <BottomNav />
   </div>
