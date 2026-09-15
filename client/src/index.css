@@ -13,3 +13,7 @@
   --font-body: "Spectral", serif;
   --font-display: "Fraunces", serif;
 }
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.7) sepia(1) saturate(2) hue-rotate(5deg);
+}
