@@ -54,7 +54,12 @@ ${text}
 
   try {
     console.log("Calling Gemini...");
-    const result = await model.generateContent(prompt);
+    const result = await Promise.race([
+      model.generateContent(prompt),
+      new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error("Gemini timed out after 25s")), 25000),
+      ),
+    ]);
     const raw = result.response.text();
     const parsed = JSON.parse(raw);
     return DreamReadingSchema.parse(parsed);
