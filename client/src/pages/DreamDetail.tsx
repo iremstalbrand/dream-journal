@@ -43,7 +43,15 @@ export default function DreamDetail() {
   }
 
   return (
-    <div className="min-h-screen bg-bg text-ink font-body p-5">
+    <div className="min-h-screen bg-bg text-ink font-body relative">
+      <img
+        src="/bg.jpg"
+        alt=""
+        className="fixed inset-0 w-full h-full object-cover opacity-50 pointer-events-none"
+      />
+
+
+      <div className="relative max-w-md mx-auto p-5">
       <p className="text-sm text-ink-soft mb-4">
         {dream.date} · {dream.type}
       </p>
@@ -151,6 +159,7 @@ export default function DreamDetail() {
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 }
