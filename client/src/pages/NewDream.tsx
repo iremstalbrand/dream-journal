@@ -3,7 +3,7 @@ import BottomNav from "../components/BottomNav";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import type { DreamType } from "../../../shared/types";
-import { motion } from "motion/react";
+import { motion } from "motion/react";  
 
 
 const TYPES = ["ordinary", "vivid", "nightmare", "lucid"] as const;
@@ -100,13 +100,20 @@ export default function NewDream() {
           className="mt-4 w-full bg-surface/70 border border-line rounded-lg px-4 py-3 text-[15px] text-ink [color-scheme:dark] backdrop-blur-sm"
         />
 
+    
+      <div className="relative mt-4">
         <textarea
           value={text}
           onChange={(e) => setText(e.target.value)}
           placeholder="I was standing at the edge of water that didn't move…"
           maxLength={3000}
-          className="w-full min-h-[200px] bg-surface/70 border border-line rounded-lg p-4 text-base text-ink placeholder:text-ink-faint mt-4 backdrop-blur-sm"
+          className="w-full min-h-[200px] bg-surface/70 border border-line rounded-lg p-4 pb-8 text-base text-ink placeholder:text-ink-faint backdrop-blur-sm block"
         />
+
+        <span className="absolute bottom-3 right-4 text-xs text-ink-faint pointer-events-none">
+          {text.length}/3000
+        </span>
+      </div>
 
         <button
           onClick={handleAnalyse}
