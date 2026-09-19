@@ -1,4 +1,3 @@
-import Header from "../components/Header";
 import BottomNav from "../components/BottomNav";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -55,16 +54,15 @@ export default function NewDream() {
       />
 
       <div className="relative max-w-md mx-auto p-5 pb-24">
-        <Header />
 
-     <div className="relative h-80 mt-6 mb-2">
-  <motion.img
-    src="/dreams/glow.png"
-    alt=""
-    className="absolute inset-0 w-full h-full object-contain"
-    animate={{ opacity: [0.5, 1, 0.5], scale: [0.95, 1.05, 0.95] }}
-    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-  />
+     <div className="relative h-60 mt-6 mb-2">
+      <motion.img
+        src="/dreams/glow.png"
+        alt=""
+        className="absolute inset-0 w-full h-full object-contain"
+        animate={{ opacity: [0.5, 1, 0.5], scale: [1, 1.05, 1] }}
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+      />
 
   {(["ordinary", "vivid", "nightmare", "lucid"] as const).map((t) => (
     <img
@@ -75,6 +73,15 @@ export default function NewDream() {
       style={{ opacity: type === t ? 1 : 0 }}
     />
   ))}
+</div>
+
+<div className="text-center mt-6 mb-5">
+  <h1 className="font-display not-italic text-[26px] leading-tight text-ink">
+    What did you dream last night?
+  </h1>
+  <p className="text-[15px] text-ink-soft mt-2">
+    Write it down before it fades.
+  </p>
 </div>
 
       <div className="grid grid-cols-4 gap-1.5 mt-4">
