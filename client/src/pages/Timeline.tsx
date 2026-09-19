@@ -4,6 +4,7 @@ import { Stars, Text, Line } from "@react-three/drei";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import * as THREE from "three";
 import type { Dream } from "../../../shared/types";
+import BottomNav from "../components/BottomNav";
 
 type Month = { key: string; label: string; short: string; dreams: Dream[] };
 
@@ -304,6 +305,8 @@ export default function Timeline() {
           </div>
         </div>
       )}
+
+      <BottomNav />
     </div>
   );
 }
