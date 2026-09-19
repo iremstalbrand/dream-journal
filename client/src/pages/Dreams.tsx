@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { motion } from "motion/react";
 import type { Dream } from "../../../shared/types";
-import Header from "../components/Header";
 import BottomNav from "../components/BottomNav";
 
 const TYPE_COLORS: Record<string, string> = {
@@ -37,9 +36,7 @@ export default function Dreams() {
         className="fixed inset-0 w-full h-full object-cover opacity-50 pointer-events-none"
       />
 
-      <Header />
-
-      <div className="relative max-w-md mx-auto p-5 pt-20 pb-24">
+      <div className="relative max-w-md mx-auto p-5 pb-24">
         <h1 className="text-2xl mb-1">Dreams</h1>
         <p className="text-ink-faint text-sm mb-6">
           {dreams.length} recorded
