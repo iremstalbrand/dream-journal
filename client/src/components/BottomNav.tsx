@@ -23,7 +23,7 @@ const items = [
               key={item.path}
               to={item.path}
               className={`flex flex-col items-center gap-1.5 ${
-                active ? "text-gold" : "text-ink-faint"
+                active ? "text-gold" : "text-ink-soft"
               }`}
             >
               <item.Icon className="w-7 h-7" />

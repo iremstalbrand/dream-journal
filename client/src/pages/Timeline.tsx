@@ -5,6 +5,7 @@ import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import * as THREE from "three";
 import { motion } from "motion/react";
 import type { Dream } from "../../../shared/types";
+import { getDreams } from "../api";
 import BottomNav from "../components/BottomNav";
 
 import OrdinaryIcon from "../assets/icons/ordinary.svg?react";
@@ -388,13 +389,14 @@ function StatRow({
 
 export default function Timeline() {
   const [dreams, setDreams] = useState<Dream[]>([]);
+  const [error, setError] = useState(false);
   const [selected, setSelected] = useState<number | null>(null);
   const cardTopRef = useRef(0);
 
   useEffect(() => {
-    fetch("http://localhost:3000/dreams")
-      .then((res) => res.json())
-      .then((data) => setDreams(data));
+    getDreams()
+      .then(setDreams)
+      .catch(() => setError(true));
   }, []);
 
   const grouped = dreams.reduce((acc, dream) => {
@@ -462,11 +464,11 @@ export default function Timeline() {
       <div className="absolute top-0 left-0 right-0 pointer-events-none">
         <div className="max-w-md mx-auto px-5 pt-5 flex items-start gap-5">
           <div className="shrink-0">
-            <p className="font-display text-[28px] text-ink leading-none">
+            <h1 className="font-display text-[28px] text-ink leading-none">
               All time
-            </p>
-            <p className="text-ink-faint text-sm mt-1.5">
-              {dreams.length} dreams
+            </h1>
+            <p className="text-ink-soft text-sm mt-1.5">
+              {error ? "Couldn't load dreams" : `${dreams.length} dreams`}
             </p>
           </div>
 
@@ -518,9 +520,9 @@ export default function Timeline() {
               </button>
             </div>
 
-            <p className="font-display text-[26px] text-ink leading-tight">
+            <h2 className="font-display text-[26px] text-ink leading-tight">
               {selectedMonth.label}
-            </p>
+            </h2>
 
             <p className="text-ink-soft text-sm mb-4">
               <span className="text-gold text-lg">{selectedMonth.total}</span>{" "}
@@ -541,7 +543,7 @@ export default function Timeline() {
           </div>
         </div>
       ) : (
-        <p className="absolute bottom-24 left-0 right-0 text-center text-[11px] tracking-[0.18em] uppercase text-ink-faint">
+        <p className="absolute bottom-24 left-0 right-0 text-center text-[11px] tracking-[0.18em] uppercase text-ink-soft">
           Tap an orbit to explore
         </p>
       )}

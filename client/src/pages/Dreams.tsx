@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { motion } from "motion/react";
 import type { Dream } from "../../../shared/types";
 import BottomNav from "../components/BottomNav";
+import { getDreams } from "../api";
 
 import OrdinaryIcon from "../assets/icons/ordinary.svg?react";
 import VividIcon from "../assets/icons/vivid.svg?react";
@@ -40,21 +41,37 @@ const STATUS_OPTIONS = [
 export default function Dreams() {
   const [dreams, setDreams] = useState<Dream[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [filterOpen, setFilterOpen] = useState(false);
   const [typeFilter, setTypeFilter] = useState<string>("all");
   const [statusFilter, setStatusFilter] = useState<string>("all");
 
   useEffect(() => {
-    fetch("http://localhost:3000/dreams")
-      .then((res) => res.json())
-      .then((data) => {
-        setDreams(data);
-        setLoading(false);
-      });
+    getDreams()
+      .then(setDreams)
+      .catch(() => setError(true))
+      .finally(() => setLoading(false));
   }, []);
 
   if (loading) {
     return <div className="min-h-screen bg-bg" />;
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-bg text-ink font-body flex flex-col items-center justify-center text-center px-5">
+        <h1 className="text-lg mb-2">Your dreams didn't load</h1>
+        <p className="text-ink-soft text-[15px] leading-relaxed max-w-[260px] mb-7">
+          Nothing is lost. Check your connection and try again.
+        </p>
+        <button
+          onClick={() => window.location.reload()}
+          className="h-12 px-8 rounded-lg bg-gold text-on-gold text-[15px] font-medium"
+        >
+          Try again
+        </button>
+      </div>
+    );
   }
 
   const visibleDreams = dreams.filter(
@@ -85,7 +102,7 @@ export default function Dreams() {
         <div className="flex items-start justify-between gap-3 mb-6">
           <div>
             <h1 className="text-2xl mb-1">Dreams</h1>
-            <p className="text-ink-faint text-sm">
+            <p className="text-ink-soft text-sm">
               {activeFilters > 0
                 ? `${visibleDreams.length} of ${dreams.length}`
                 : `${dreams.length} recorded`}
@@ -120,7 +137,7 @@ export default function Dreams() {
         {filterOpen && (
           <div className="absolute right-0 top-full mt-2 z-20 w-56 p-3 rounded-xl border border-line bg-surface/95 backdrop-blur-sm shadow-lg flex flex-col gap-3">
             <div>
-              <p className="text-[8px] tracking-[0.18em] uppercase text-ink-faint mb-1.5">
+              <p className="text-[8px] tracking-[0.18em] uppercase text-ink-soft mb-1.5">
                 Type
               </p>
               <div className="flex flex-wrap gap-1.5">
@@ -137,7 +154,7 @@ export default function Dreams() {
               </div>
             </div>
             <div>
-              <p className="text-[8px] tracking-[0.18em] uppercase text-ink-faint mb-1.5">
+              <p className="text-[8px] tracking-[0.18em] uppercase text-ink-soft mb-1.5">
                 Status
               </p>
               <div className="flex flex-wrap gap-1.5">
@@ -160,7 +177,7 @@ export default function Dreams() {
                   setTypeFilter("all");
                   setStatusFilter("all");
                 }}
-                className="self-start text-[9px] tracking-[0.14em] uppercase text-ink-faint underline"
+                className="self-start text-[9px] tracking-[0.14em] uppercase text-ink-soft underline"
               >
                 Clear filters
               </button>
@@ -221,13 +238,13 @@ export default function Dreams() {
                     <div className="flex items-center justify-between gap-3 mb-4">
                       <div className="flex items-center gap-2.5 min-w-0">
                       <span
-                        className="w-[25px] h-[25px] rounded-full border flex items-center justify-center shrink-0"
+                        className="w-7 h-7 rounded-full border flex items-center justify-center shrink-0"
                         style={{ borderColor: color, color, backgroundColor: tint(color) }}
                       >
-                        <TypeIcon className="w-3 h-3" />
+                        <TypeIcon className="w-3.5 h-3.5" />
                       </span>
                         <span
-                          className="text-[8px] tracking-[0.18em] uppercase truncate"
+                          className="text-xs tracking-wider uppercase truncate"
                           style={{ color }}
                         >
                           {dream.type}
@@ -239,12 +256,12 @@ export default function Dreams() {
                         style={{ color: statusColor }}
                       >
                         <span
-                          className="w-5 h-5 rounded-full border border-current flex items-center justify-center"
+                          className="w-6 h-6 rounded-full border border-current flex items-center justify-center"
                           style={{ backgroundColor: tint(statusColor) }}
                         >
-                          <StatusIcon className="w-2.5 h-2.5" />
+                          <StatusIcon className="w-3 h-3" />
                         </span>
-                        <span className="text-[7px] tracking-[0.18em] uppercase">
+                        <span className="text-xs tracking-wider uppercase">
                           {dream.reading ? "Interpreted" : "Not read"}
                         </span>
                       </div>
@@ -254,7 +271,7 @@ export default function Dreams() {
                       {title}
                     </h2>
 
-                    <p className="text-xs text-ink-faint mb-3">
+                    <p className="text-xs text-ink-soft mb-3">
                       {new Date(dream.date).toLocaleDateString("en-GB", {
                         day: "numeric",
                         month: "short",

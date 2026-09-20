@@ -3,12 +3,14 @@ import { useParams, useSearchParams, useNavigate } from "react-router-dom";
 import { motion } from "motion/react";
 import type { Dream } from "../../../shared/types";
 import BottomNav from "../components/BottomNav";
+import { getDream, requestReading } from "../api";
 
 export default function DreamDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [dream, setDream] = useState<Dream | null>(null);
   const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");
+  const [loadFailed, setLoadFailed] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [searchParams] = useSearchParams();
   const shouldAnalyse = searchParams.get("analyse") === "true";
@@ -16,11 +18,7 @@ export default function DreamDetail() {
   async function handleRead() {
     setStatus("loading");
     try {
-      const res = await fetch(`http://localhost:3000/dreams/${id}/reading`, {
-        method: "POST",
-      });
-      if (!res.ok) throw new Error();
-      const updated = await res.json();
+      const updated = await requestReading(id!);
       setDream(updated);
       setStatus("idle");
     } catch {
@@ -35,10 +33,27 @@ export default function DreamDetail() {
   }, [dream, shouldAnalyse]);
 
   useEffect(() => {
-    fetch(`http://localhost:3000/dreams/${id}`)
-      .then((res) => res.json())
-      .then((data) => setDream(data));
+    getDream(id!)
+      .then(setDream)
+      .catch(() => setLoadFailed(true));
   }, [id]);
+
+  if (loadFailed) {
+    return (
+      <div className="min-h-screen bg-bg text-ink font-body flex flex-col items-center justify-center text-center px-5">
+        <h1 className="text-lg mb-2">This dream didn't load</h1>
+        <p className="text-ink-soft text-[15px] leading-relaxed max-w-[260px] mb-7">
+          It may have been removed, or the connection dropped.
+        </p>
+        <button
+          onClick={() => navigate("/dreams")}
+          className="h-12 px-8 rounded-lg bg-gold text-on-gold text-[15px] font-medium"
+        >
+          Back to dreams
+        </button>
+      </div>
+    );
+  }
 
   if (!dream) {
     return <div className="min-h-screen bg-bg" />;
@@ -59,6 +74,8 @@ export default function DreamDetail() {
         >
           ← Back
         </button>
+
+        <h1 className="sr-only">Dream from {dream.date}</h1>
 
         <p className="text-sm text-ink-soft mb-4">
           {dream.date} · {dream.type}
@@ -112,7 +129,7 @@ export default function DreamDetail() {
               ))}
             </div>
 
-            <p className="text-xs text-ink-faint mt-4">
+            <p className="text-xs text-ink-soft mt-4">
               This takes a few seconds.
             </p>
           </div>
@@ -138,8 +155,8 @@ export default function DreamDetail() {
           <div className="mt-8">
             <div className="h-px bg-line mb-6" />
 
-            <p className="text-lg mb-1">Through Jung's lens</p>
-            <p className="text-xs text-ink-faint leading-relaxed mb-5">
+            <h2 className="text-lg mb-1">Through Jung's lens</h2>
+            <p className="text-xs text-ink-soft leading-relaxed mb-5">
               One reading among many. Not what your dream means.
             </p>
 

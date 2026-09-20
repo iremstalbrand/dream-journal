@@ -2,7 +2,8 @@ import BottomNav from "../components/BottomNav";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import type { DreamType } from "../../../shared/types";
-import { motion } from "motion/react";  
+import { motion } from "motion/react";
+import { createDream } from "../api";
 
 
 const TYPES = ["ordinary", "vivid", "nightmare", "lucid"] as const;
@@ -11,37 +12,21 @@ export default function NewDream() {
   const [type, setType] = useState<DreamType>("ordinary");
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
   const [text, setText] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState(false);
   const navigate = useNavigate();
 
-  async function handleSave() {
-    const res = await fetch("http://localhost:3000/dreams", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ date, type, text }),
-    });
-
-    if (!res.ok) {
-      console.error("Save failed");
-      return;
+  // Both buttons save the dream; analysing then opens it with ?analyse=true.
+  async function save(analyse: boolean) {
+    setSaving(true);
+    setError(false);
+    try {
+      const dream = await createDream({ date, type, text });
+      navigate(analyse ? `/dream/${dream._id}?analyse=true` : "/dreams");
+    } catch {
+      setError(true);
+      setSaving(false);
     }
-
-    navigate("/dreams");
-  }
-
-  async function handleAnalyse() {
-    const res = await fetch("http://localhost:3000/dreams", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ date, type, text }),
-    });
-
-    if (!res.ok) {
-      console.error("Save failed");
-      return;
-    }
-
-    const dream = await res.json();
-    navigate(`/dream/${dream._id}?analyse=true`);
   }
 
   return (
@@ -84,10 +69,17 @@ export default function NewDream() {
   </p>
 </div>
 
-      <div className="grid grid-cols-4 gap-1.5 mt-4">
+      <div
+        role="radiogroup"
+        aria-label="Dream type"
+        className="grid grid-cols-4 gap-1.5 mt-4"
+      >
   {TYPES.map((t) => (
     <button
       key={t}
+      type="button"
+      role="radio"
+      aria-checked={type === t}
       onClick={() => setType(t)}
       className={
         type === t
@@ -100,7 +92,11 @@ export default function NewDream() {
   ))}
 </div>
 
+        <label htmlFor="dream-date" className="sr-only">
+          Date of the dream
+        </label>
         <input
+          id="dream-date"
           type="date"
           value={date}
           onChange={(e) => setDate(e.target.value)}
@@ -109,7 +105,11 @@ export default function NewDream() {
 
     
       <div className="relative mt-4">
+        <label htmlFor="dream-text" className="sr-only">
+          Describe your dream
+        </label>
         <textarea
+          id="dream-text"
           value={text}
           onChange={(e) => setText(e.target.value)}
           placeholder="I was standing at the edge of water that didn't move…"
@@ -117,23 +117,29 @@ export default function NewDream() {
           className="w-full min-h-[200px] bg-surface/70 border border-line rounded-lg p-4 pb-8 text-base text-ink placeholder:text-ink-faint backdrop-blur-sm block"
         />
 
-        <span className="absolute bottom-3 right-4 text-xs text-ink-faint pointer-events-none">
+        <span className="absolute bottom-3 right-4 text-xs text-ink-soft pointer-events-none">
           {text.length}/3000
         </span>
       </div>
 
+        {error && (
+          <p role="alert" className="mt-4 text-[14px] text-ink-soft text-center">
+            Your dream couldn't be saved. Your text is still here, try again.
+          </p>
+        )}
+
         <button
-          onClick={handleAnalyse}
-          disabled={!text.trim()}
+          onClick={() => save(true)}
+          disabled={!text.trim() || saving}
           className="w-full h-12 mt-4 rounded-lg bg-gold text-on-gold text-[15px] font-medium disabled:opacity-40"
         >
           Analyse through Jung
         </button>
 
         <button
-          onClick={handleSave}
-          disabled={!text.trim()}
-          className="w-full mt-3 text-[13px] text-ink-faint disabled:opacity-40"
+          onClick={() => save(false)}
+          disabled={!text.trim() || saving}
+          className="w-full mt-3 text-[13px] text-ink-soft disabled:opacity-40"
         >
           Save without analysing
         </button>
