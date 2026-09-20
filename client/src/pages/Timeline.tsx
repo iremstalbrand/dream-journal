@@ -362,12 +362,19 @@ function StatRow({
   max: number;
   delay: number;
 }) {
+  const Icon = kindIcons[kind];
   return (
     <div className="flex items-center gap-2.5">
       <span
-        className="w-2 h-2 rounded-full shrink-0"
-        style={{ background: kindColors[kind] }}
-      />
+        className="w-[18px] h-[18px] rounded-full border flex items-center justify-center shrink-0"
+        style={{
+          borderColor: kindColors[kind],
+          color: kindColors[kind],
+          backgroundColor: tint(kindColors[kind]),
+        }}
+      >
+        <Icon className="w-2.5 h-2.5" />
+      </span>
       <span className="text-[13px] text-ink capitalize w-20 shrink-0">
         {kind}
       </span>
