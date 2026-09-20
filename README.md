@@ -4,8 +4,9 @@ Write a dream. Get a Jungian reading of it. Watch months of entries take shape i
 
 **The AI proposes, the dreamer decides.**
 
-> Work in progress. Individual project for Hyper Island FED27, in active development.
-> The data layer and API are working; the interface is being built.
+> Individual project for Hyper Island FED27. Capture, dream list, AI readings and the 3D timeline all work. Auth is next.
+
+<!-- Add screenshots here: capture screen, dream list, reading, 3D timeline -->
 
 ---
 
@@ -77,7 +78,7 @@ The same schema generates the TypeScript type used in the React components, so w
 | Database   | MongoDB Atlas + Mongoose    |
 | Validation | Zod, shared                 |
 | AI         | Gemini, behind one route    |
-| Auth       | Clerk                       |
+| Auth       | Clerk (planned)             |
 | Deploy     | Vercel + Render             |
 
 ---
@@ -121,6 +122,8 @@ MONGODB_URI=...
 GEMINI_API_KEY=...
 ```
 
+Optional: `client/.env` sets the API address (see `client/.env.example`). It defaults to `http://localhost:3000`.
+
 Seed the database:
 
 ```bash
@@ -131,22 +134,22 @@ npm run seed
 
 ## Status
 
-Work in progress.
-
 Done:
 
 - Zod schemas, shared between client and server
 - MongoDB models and seeding
 - Express API with validated archetype output
+- Capture screen and dream list, with type and status filters
+- Reading route to Gemini, with timeout and fallback
+- Dream detail page showing the reading
+- 3D timeline
+- Loading and error states on every screen that fetches data
 
 Next:
 
-- Capture screen and dream list
-- Reading route to Gemini
-- Auth with Clerk
-- 3D timeline
-
----
+- Auth with Clerk (the API currently serves one shared seed user)
+- Validate API responses on the client with the shared schemas
+- Tests, and deploy to Vercel + Render
 
 ## Context
 
