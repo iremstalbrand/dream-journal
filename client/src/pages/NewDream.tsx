@@ -53,9 +53,9 @@ export default function NewDream() {
         className="fixed inset-0 w-full h-full object-cover opacity-50 pointer-events-none"
       />
 
-      <div className="relative max-w-md mx-auto p-5 pb-24">
+      <div className="relative max-w-md mx-auto px-5 pt-3 pb-24">
 
-     <div className="relative h-60 mt-6 mb-2">
+     <div className="relative h-60 mt-0 mb-2">
       <motion.img
         src="/dreams/glow.png"
         alt=""
