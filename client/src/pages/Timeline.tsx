@@ -413,8 +413,29 @@ export default function Timeline() {
     return acc;
   }, {} as Record<string, Dream[]>);
 
-  const months: MonthData[] = Object.entries(grouped)
-    .sort(([a], [b]) => b.localeCompare(a))
+  // Every month between the newest and oldest dream gets a node, even when
+  // it has no dreams (it then shows just the core, with no rings).
+  const dataKeys = Object.keys(grouped).sort((a, b) => b.localeCompare(a));
+  const monthKeys: string[] = [];
+  if (dataKeys.length > 0) {
+    const [newestY, newestM] = dataKeys[0].split("-").map(Number);
+    const oldest = dataKeys[dataKeys.length - 1];
+    let y = newestY;
+    let m = newestM;
+    for (;;) {
+      const key = `${y}-${String(m).padStart(2, "0")}`;
+      monthKeys.push(key);
+      if (key <= oldest) break;
+      m -= 1;
+      if (m === 0) {
+        m = 12;
+        y -= 1;
+      }
+    }
+  }
+
+  const months: MonthData[] = monthKeys
+    .map((key) => [key, grouped[key] ?? []] as [string, Dream[]])
     .map(([key, ds], i) => ({
       key,
       label: new Date(key + "-01").toLocaleString("en", { month: "long" }),
