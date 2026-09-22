@@ -153,4 +153,4 @@ Next:
 
 ## Context
 
-Individual project, Hyper Island FED27. Primary learning goal: TypeScript end to end, from database to components.
+Individual project, Hyper Island FED27.
