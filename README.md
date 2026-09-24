@@ -153,4 +153,4 @@ Next:
 
 ## Context
 
-Individual project, Hyper Island FED27.
+Individual project, Hyper Island FED27
