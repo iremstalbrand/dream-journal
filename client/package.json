@@ -3,11 +3,12 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-"scripts": {
-  "dev": "tsx watch server/index.ts",
-  "seed": "tsx server/seed.ts",
-  "build": "cd client && npm install && npm run build"
-},
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "oxlint",
+    "preview": "vite preview"
+  },
   "dependencies": {
     "@clerk/clerk-react": "^5.61.10",
     "@react-three/drei": "^10.7.8",
