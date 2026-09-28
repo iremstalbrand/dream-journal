@@ -6,7 +6,7 @@
 "scripts": {
     "dev": "tsx watch server/index.ts",
     "seed": "tsx server/seed.ts",
-    "build": "cd client && npm install && npm run build"
+    "build": "npm run build --prefix client"
   },
   "dependencies": {
     "@clerk/clerk-react": "^5.61.10",
