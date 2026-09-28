@@ -37,7 +37,7 @@ export const DreamReadingSchema = z.object({
 export const DreamSchema = z.object({
   _id: z.string(),
   userId: z.string(),
-  date: z.string(),
+  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Date must be YYYY-MM-DD"),
   type: DreamType,
   text: z.string().min(1).max(3000),
   reading: DreamReadingSchema.nullable(),

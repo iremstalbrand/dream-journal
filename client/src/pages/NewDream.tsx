@@ -10,7 +10,7 @@ const TYPES = ["ordinary", "vivid", "nightmare", "lucid"] as const;
 
 export default function NewDream() {
   const [type, setType] = useState<DreamType>("ordinary");
-  const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
+  const [date, setDate] = useState(() => new Date().toLocaleDateString("sv-SE"));
   const [text, setText] = useState("");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(false);
