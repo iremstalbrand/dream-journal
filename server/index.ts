@@ -5,9 +5,15 @@ import dreamsRouter from "./routes/dreams";
 
 const PORT = process.env.PORT || 3000;
 
+
 const app = express();
-app.use(cors({ origin: true })); // TODO: restrict to the Vercel origin once known
-app.use(express.json());
+app.use(cors({
+  origin: [
+    "http://localhost:5173",
+    "https://dream-journal-lemon.vercel.app",
+    "https://dream-journal-sable.vercel.app"
+  ]
+}));
 
 app.get("/health", (req, res) => res.json({ ok: true })); //is the server actually running?"
 app.use("/dreams", dreamsRouter);
