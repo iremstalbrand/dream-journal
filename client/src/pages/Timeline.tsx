@@ -310,16 +310,41 @@ function CameraRig({
   const scrollRef = useRef(0);
   const count = months.length;
 
-  useEffect(() => {
-    function onWheel(e: WheelEvent) {
-      scrollRef.current = Math.max(
-        0,
-        Math.min(count - 1, scrollRef.current + e.deltaY * 0.004)
-      );
-    }
-    window.addEventListener("wheel", onWheel, { passive: true });
-    return () => window.removeEventListener("wheel", onWheel);
-  }, [count]);
+ useEffect(() => {
+  const maxIndex = count - 1;
+  let lastY = 0;
+
+  function onWheel(e: WheelEvent) {
+    scrollRef.current = Math.max(
+      0,
+      Math.min(maxIndex, scrollRef.current + e.deltaY * 0.004)
+    );
+  }
+
+  function onTouchStart(e: TouchEvent) {
+    lastY = e.touches[0].clientY;
+  }
+
+  function onTouchMove(e: TouchEvent) {
+    const y = e.touches[0].clientY;
+    const delta = lastY - y;
+    lastY = y;
+    scrollRef.current = Math.max(
+      0,
+      Math.min(maxIndex, scrollRef.current + delta * 0.012)
+    );
+  }
+
+  window.addEventListener("wheel", onWheel, { passive: true });
+  window.addEventListener("touchstart", onTouchStart, { passive: true });
+  window.addEventListener("touchmove", onTouchMove, { passive: true });
+
+  return () => {
+    window.removeEventListener("wheel", onWheel);
+    window.removeEventListener("touchstart", onTouchStart);
+    window.removeEventListener("touchmove", onTouchMove);
+  };
+}, [count]);
 
   useFrame((state, rawDelta) => {
     const delta = Math.min(rawDelta, 0.05);
