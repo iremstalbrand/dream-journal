@@ -1,13 +1,23 @@
 import { readDream } from "../gemini";
 import { Router } from "express";
+import { getAuth } from "@clerk/express";
 import { Dream } from "../models/Dream";
 import { NewDreamSchema } from "../../shared/types";
 
 const router = Router();
 
+router.use((req, res, next) => {
+  const { userId } = getAuth(req);
+  if (!userId) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+  res.locals.userId = userId;
+  next();
+});
+
 router.get("/", async (req, res) => {
   try {
-    const dreams = await Dream.find({ userId: "seed-user" }).sort({ date: -1 });
+    const dreams = await Dream.find({ userId: res.locals.userId }).sort({ date: -1 });
     res.status(200).json(dreams);
   } catch (error) {
     console.error("Error getting dreams:", error);
@@ -19,7 +29,7 @@ router.get("/:id", async (req, res) => {
   try {
     const dream = await Dream.findOne({
       _id: req.params.id,
-      userId: "seed-user",
+      userId: res.locals.userId,
     });
 
     if (!dream) {
@@ -39,7 +49,7 @@ router.post("/", async (req, res) => {
     if (!result.success) {
       return res.status(400).json({ error: result.error.issues });
     }
-    const dream = await Dream.create({ ...result.data, userId: "seed-user" });
+    const dream = await Dream.create({ ...result.data, userId: res.locals.userId });
     res.status(201).json(dream);
   } catch (error) {
     console.error("Error creating dream:", error);
@@ -47,12 +57,11 @@ router.post("/", async (req, res) => {
   }
 });
 
-
 router.post("/:id/reading", async (req, res) => {
   try {
     const dream = await Dream.findOne({
       _id: req.params.id,
-      userId: "seed-user",
+      userId: res.locals.userId,
     });
 
     if (!dream) {

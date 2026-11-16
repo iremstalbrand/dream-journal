@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors"; //Cross-Origin Resource Sharing
+import { clerkMiddleware } from "@clerk/express";
 import { connectDB } from "./db";
 import dreamsRouter from "./routes/dreams";
 
@@ -14,6 +15,9 @@ app.use(cors({
     "https://dream-journal-sable.vercel.app"
   ]
 }));
+
+app.use(express.json());
+app.use(clerkMiddleware());
 
 app.get("/health", (req, res) => res.json({ ok: true })); //is the server actually running?"
 app.use("/dreams", dreamsRouter);
